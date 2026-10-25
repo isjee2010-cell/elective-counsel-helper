@@ -1,0 +1,5 @@
+# 줄바꿈을 바꾸지 않아 해시(SHA-256)가 운영체제와 관계없이 같게
+* text=auto eol=lf
+dist/*.html -text -diff linguist-generated
+vendor/*.js -text -diff linguist-vendored
+data/*.json linguist-generated
