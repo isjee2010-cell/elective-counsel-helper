@@ -1,0 +1,3 @@
+#!/bin/sh
+# 설치: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+python3 scripts/check_repo.py || { echo "커밋을 멈췄습니다. 위 문제를 해결한 뒤 다시 커밋하세요."; exit 1; }

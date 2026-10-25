@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" data-app="elective-counsel">
+<head>
+<meta charset="UTF-8">
+<!--@@CSP@@-->
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- 선택과목 상담일지 작성 도우미 버전 1.5 (2026-10-24)
+     학생 기록은 이 파일(또는 이 PC의 브라우저)에만 저장되며 외부로 전송되지 않습니다.
+     보안: Content-Security-Policy로 모든 네트워크 통신(connect/img/font/form 등)을 막고,
+     파일에 들어 있는 두 스크립트(해시로 지정)만 실행되도록 잠가 두었습니다.
+
+     ── 포함된 외부 라이브러리 ──
+     ExcelJS 4.4.0 — https://github.com/exceljs/exceljs
+     The MIT License (MIT)
+     Copyright (c) 2014-2019 Guyon Roche
+     Permission is hereby granted, free of charge, to any person obtaining a copy
+     of this software and associated documentation files (the "Software"), to deal
+     in the Software without restriction, including without limitation the rights
+     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     copies of the Software, and to permit persons to whom the Software is
+     furnished to do so, subject to the following conditions:
+     The above copyright notice and this permission notice shall be included in all
+     copies or substantial portions of the Software.
+     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     SOFTWARE.
+     ExcelJS 번들에는 JSZip(MIT 또는 GPLv3 중 택일), pako(MIT), sax·saxes(ISC) 등이 함께 들어 있으며 각 라이선스를 따릅니다. -->
+<title>선택과목 상담일지 작성 도우미</title>
+<style>
+/*@@CSS@@*/
+</style>
+</head>
+<body>
+<header id="hdr">
+  <div class="brand">
+    <div class="ttl"><h1 id="app-title">선택과목 상담일지 작성 도우미</h1><button type="button" id="app-school" class="school-badge empty">학교명 입력</button></div>
+    <span class="sub" id="app-sub">교육과정을 불러오면 상담을 시작할 수 있습니다</span>
+  </div>
+  <div class="right">
+    <div class="vw">
+      <button class="hbtn" id="b-view" aria-haspopup="menu" aria-expanded="false" title="글자 크기 · 이름 가리기 · 발표 모드">보기 ▾</button>
+      <div id="view-menu" class="hide" role="menu">
+        <div class="vm-row"><span class="vm-k">글자 크기</span><div class="seg" id="zoom-seg"><button type="button" data-z="100">100%</button><button type="button" data-z="115">115%</button><button type="button" data-z="130">130%</button></div></div>
+        <label class="vm-row"><span class="vm-k">학생 이름 가리기<small>화면·인쇄만 「김○○」, 엑셀·백업은 실명</small></span><input type="checkbox" class="sw" id="vm-mask"></label>
+        <button type="button" class="btn vm-btn hide-m" id="b-present">발표 모드 (크게 + 전체 화면)</button>
+      </div>
+    </div>
+    <button class="hbtn" id="b-priv" title="엑셀 백업 · 이 PC에 남은 기록 지우기 · 백업으로 되살리기">🔒<span class="lbl"> 백업·지우기</span></button>
+    <button class="hbtn st-btn st-no" id="b-link"><span class="st-dot"></span><span class="st-tx"><b class="st-t">파일에 저장 연결</b><small class="st-s" id="save-ind">아직 저장 전</small></span></button>
+  </div>
+</header>
+<nav id="tabs">
+  <button class="tab on" data-tab="counsel">💬 상담하기</button>
+  <button class="tab" data-tab="student">🎓 학생별 기록</button>
+  <button class="tab" data-tab="list">📋 상담 목록</button>
+  <button class="tab" data-tab="sheet">🗂️ 선택 현황표</button>
+  <button class="tab" data-tab="check">✅ 검증 결과</button>
+  <button class="tab" data-tab="grade">🏫 학년 현황</button>
+  <button class="tab" data-tab="cur">⚙️ 교육과정 설정</button>
+  <button class="tab" data-tab="help">📘 간단 사용법</button>
+</nav>
+<div id="banner" class="hide"></div>
+<main id="main"><div class="page" id="page"></div></main>
+<div id="dim" class="hide"></div>
+<div id="toast" class="hide"></div>
+<div id="print"></div>
+<input type="file" id="f-cur" accept=".xlsx,.xlsm,.xls" class="hide">
+<input type="file" id="f-db" accept=".xlsx,.xlsm" class="hide">
+<input type="file" id="f-merge" accept=".html,.htm,.xlsx,.xlsm" multiple class="hide">
+<input type="file" id="f-self" accept=".html,.htm" class="hide">
+<input type="file" id="f-restore" accept=".xlsx" class="hide">
+<input type="file" id="f-pick" accept=".xlsx,.xlsm,.xls" class="hide">
+
+<script id="J-MASTER" type="application/json">/*@@MASTER@@*/</script>
+<script id="J-CUR" type="application/json">/*@@CUR@@*/</script>
+<script id="J-DB" type="application/json">/*@@DB@@*/</script>
+<script>
+/*@@EXCELJS@@*/
+</script>
+<script>
+/*@@APP@@*/
+</script>
+</body>
+</html>
