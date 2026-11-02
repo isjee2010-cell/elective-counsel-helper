@@ -13,8 +13,6 @@
 *.jpg
 *.jpeg
 # 기록이 저장된 HTML 사본 (배포 파일 dist/ 와 화면 틀 src/shell.html 만 허용)
-*.html
-*.htm
 !dist/*.html
 !src/shell.html
 # 도구
