@@ -9,7 +9,7 @@ function uid(p){ return (p||'x')+Date.now().toString(36)+Math.random().toString(
 function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function readBlock(id){ try{ const t=document.getElementById(id).textContent.trim(); return t?JSON.parse(t):null; }catch(e){ return null; } }
 
-const APP_VERSION='1.5', APP_DATE='2026-10-24';
+const APP_VERSION='1.6', APP_DATE='2026-10-30';
 const APP_NAME='선택과목 상담일지 작성 도우미', APP_SHORT='상담일지 도우미';
 const MASTER = readBlock('J-MASTER') || [];   /* [과정구분, 교과군, 계열(상위), 계열(하위), 과목명, 유형] */
 const TYPES = ['일반선택','진로선택','융합선택'];

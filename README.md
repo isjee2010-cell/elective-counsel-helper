@@ -11,8 +11,8 @@
 1. 오른쪽 **Releases**에서 최신 버전의 `elective-counsel-helper-vX.Y.html`을 내려받습니다.
    (저장소의 [`dist/`](dist/) 폴더에도 같은 파일이 있습니다.)
 2. **진짜 파일인지 확인**(권장): 내려받은 파일의 SHA-256 값이 [`dist/SHA256SUMS.txt`](dist/SHA256SUMS.txt)·Release 설명의 값과 같은지 봅니다.
-   - Windows: 파일이 있는 폴더에서 `certutil -hashfile elective-counsel-helper-v1.5.html SHA256`
-   - macOS: `shasum -a 256 elective-counsel-helper-v1.5.html`
+   - Windows: 파일이 있는 폴더에서 `certutil -hashfile elective-counsel-helper-v1.6.html SHA256`
+   - macOS: `shasum -a 256 elective-counsel-helper-v1.6.html`
 3. 파일 이름은 마음대로 바꿔도 됩니다(예: `2학년3반_선택과목상담.html`).
 
 > ⚠️ 이 저장소의 Releases가 아닌 곳(메신저로 돌아다니는 파일 등)에서 받은 파일은 누군가 고쳤을 수 있습니다. 반드시 해시를 확인하거나 여기서 받으세요.
@@ -23,7 +23,7 @@
 |---|---|
 | 교육과정 담당 | 학교명 입력 → 나이스 「입학생 학교 교육과정 조회」 엑셀을 올림(끌어다 놓아도 됨) → 과목당 학점 확인 → **배포용 파일 만들기**로 담임께 나눔 |
 | 담임 | 받은 파일을 **내 폴더에 저장** → 크롬·엣지로 열기 → 오른쪽 위 빨간 점 **「파일에 저장 연결」**(초록 점이 되면 자동 저장) → 학생 추가(반 명단 붙여넣기 가능) → 과목 고르고 저장 |
-| 학년 취합 | 담임 파일들을 「학년 현황 → 파일 합치기」로 한 번에 모음 |
+| 학년 취합 | 학생 명단·기록이 든 학년 파일을 「학년 현황 → 반별 파일로 나누기」로 반마다 나눠 담임께 보냄 → 담임이 고친 파일을 「파일 선택해서 합치기」로 다시 모음 |
 
 - 지원 브라우저: **크롬, 엣지**(파일 안 자동 저장). 사파리·파이어폭스는 이 PC의 브라우저에만 임시 저장됩니다.
 - 새 버전으로 옮길 때: 쓰던 파일에서 「🔒 백업·지우기 → 백업 받기」 → 새 파일에서 「백업 파일로 되살리기」.
@@ -41,7 +41,7 @@
 ## 개발자용
 
 ```bash
-python3 build.py --release dist/elective-counsel-helper-v1.5.html   # 재현 가능한 빌드 (같은 소스 → 같은 해시)
+python3 build.py --release dist/elective-counsel-helper-v1.6.html   # 재현 가능한 빌드 (같은 소스 → 같은 해시)
 python3 scripts/check_repo.py                                          # 개인정보 의심 파일·CSP·해시 점검
 npm install && npx playwright install chromium && npm test             # 보안 시험 (가상 데이터)
 ```

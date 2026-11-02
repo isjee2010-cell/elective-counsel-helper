@@ -463,8 +463,8 @@ function renderGrade(P){
   const G=ST.grade; const bans=bansOf(DB.students);
   const D=gradeData(G.ban);
   const done=D.rows.filter(x=>x.lr).length, ok=D.rows.filter(x=>x.st==='ok').length, bad=D.rows.filter(x=>x.st==='bad').length, warn=D.rows.filter(x=>x.st==='warn').length;
-  let h='<div class="card"><h2>담임 파일 합치기<span class="tail"><button class="btn pri" id="gr-merge">파일 선택해서 합치기</button></span></h2>'
-    +'<p class="small muted">다른 선생님이 저장한 <b>'+APP_SHORT+' HTML 파일</b>이나 <b>상담 목록 엑셀</b>(이 앱에서 내려받은 것 또는 기존 「선택과목 상담툴」 엑셀 .xlsm)을 여러 개 한 번에 고르면 이 파일에 합쳐집니다. 같은 기록은 한 번만 들어가고, 더 최근에 고친 기록이 남습니다.</p>'
+  let h='<div class="card"><h2>담임 파일 나누기 · 합치기<span class="tail"><button class="btn" id="gr-split" title="반마다 그 반 학생·상담 기록만 담은 파일을 만들어 담임 선생님께 나눠 드립니다">반별 파일로 나누기</button><button class="btn pri" id="gr-merge">파일 선택해서 합치기</button></span></h2>'
+    +'<p class="small muted"><b>나누기</b>: 학년 전체 파일에서 반마다 그 반 학생·상담 기록만 담은 파일을 만듭니다. <b>합치기</b>: 다른 선생님이 저장한 <b>'+APP_SHORT+' HTML 파일</b>이나 <b>상담 목록 엑셀</b>(이 앱에서 내려받은 것 또는 기존 「선택과목 상담툴」 엑셀 .xlsm)을 여러 개 한 번에 고르면 이 파일에 합쳐집니다. 같은 기록은 한 번만 들어가고, 더 최근에 고친 기록이 남습니다.</p>'
     +'<div id="gr-log"></div></div>';
   h+='<div class="card"><h2>현황 <select id="gr-ban" style="font-weight:600"><option value="">전체 반</option>'+bans.map(b=>'<option value="'+esc(b)+'"'+(b===G.ban?' selected':'')+'>'+esc(b)+'반</option>').join('')+'</select>'
     +'<span class="tail"><button class="btn" id="gr-xls">학년 현황 엑셀로 내려받기</button></span></h2>'
@@ -507,6 +507,7 @@ function renderGrade(P){
   if(none.length) h+='<div class="card"><h2>아직 상담하지 않은 학생 <span class="small muted">'+none.length+'명</span></h2><div class="row">'+none.map(x=>'<span class="pill p-mute">'+esc(stuNo(x.s)+' '+dn(x.s.name))+'</span>').join('')+'</div></div>';
   P.innerHTML=h;
   $('#gr-merge').onclick=()=>$('#f-merge').click();
+  $('#gr-split').onclick=()=>splitModal();
   $('#gr-ban').onchange=e=>{ G.ban=e.target.value; renderGrade(P); };
   const mi=$('#gr-min'); if(mi) mi.onchange=e=>{ G.min=e.target.value; renderGrade(P); };
   const gs=$('#gr-sort'); if(gs) gs.onchange=e=>{ G.sortN=e.target.checked; keepScroll(()=>renderGrade(P)); };
@@ -611,7 +612,7 @@ function renderCurPage(P){
     +'<div class="step"><span class="n">1단계</span><span class="t">나이스 편성표 올리기</span><span class="d">나이스 → 교육과정 → 입학생학교교육과정관리 → 입학생학교교육과정등록/검증 → <b>입학생 학교 교육과정 조회</b>에서 엑셀로 내려받은 파일을 그대로 올립니다. 화면에서 <b>과목당 학점</b>만 확인하면 됩니다.</span><button class="btn pri" id="cu-up">나이스 엑셀 올리기</button></div>'
     +'<div class="step"><span class="n">2단계 · 필요할 때</span><span class="t">양식 채우기</span><span class="d">학점·택·선이수과목은 아래 「과목 표」에서 바로 고칠 수 있습니다. <b>학점 기준</b>(예: 국영수 상한)을 넣거나 여러 과목을 한꺼번에 고칠 때는 엑셀 양식으로 받아 채운 뒤 다시 올립니다.</span>'
       +'<div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn" id="cu-cur" '+(CUR?'':'disabled')+'>① 양식으로 받기</button><button class="btn" id="cu-up2">② 채운 양식 올리기</button></div></div>'
-    +'<div class="step"><span class="n">3단계 · 담당자</span><span class="t">담임 배포용 파일 만들기</span><span class="d">이 교육과정과 학교명이 들어 있고 기록은 빈 HTML 파일을 내려받아 담임 선생님들께 나눠 드립니다.</span><button class="btn" id="cu-dist" '+(CUR?'':'disabled')+'>배포용 파일 만들기</button></div>'
+    +'<div class="step"><span class="n">3단계 · 담당자</span><span class="t">담임 배포용 파일 만들기</span><span class="d">이 교육과정과 학교명이 들어 있고 기록은 빈 HTML 파일을 내려받아 담임 선생님들께 나눠 드립니다. 학생 명단·기록까지 반별로 나눠 주려면 「학년 현황 → 반별 파일로 나누기」.</span><button class="btn" id="cu-dist" '+(CUR?'':'disabled')+'>배포용 파일 만들기</button></div>'
     +'</div>'
     +'<div class="row small muted" style="margin-top:10px;gap:8px;flex-wrap:wrap"><span>나이스 파일이 없나요? 빈 양식에 직접 적어 1단계처럼 올려도 됩니다. 기존 「선택과목 상담툴」 엑셀(.xlsm)도 그대로 올릴 수 있습니다.</span><button class="btn ghost" id="cu-blank">빈 양식 내려받기 (.xlsx)</button></div>'
     +'</div>';
@@ -687,7 +688,7 @@ function guideHtml(forPrint){
     +'<li>「교육과정 설정 → <b>학교 정보</b>」에 학교명 적기</li>'
     +'<li>나이스 「입학생 학교 교육과정 조회」 엑셀을 「<b>나이스 엑셀 올리기</b>」로 올리거나 화면에 끌어다 놓고, 과목당 학점 확인</li>'
     +'<li>선이수과목·학점은 「<b>과목 표 → 표에서 바로 고치기</b>」, 학점 기준은 양식이나 「검증 결과 → 새 검증 규칙」으로<br><small>나이스 파일이 없으면 빈 양식에 직접 적어 올립니다.</small></li>'
-    +'<li>「<b>배포용 파일 만들기</b>」로 받은 HTML을 담임께 나눠 드립니다. (교육과정·규칙만 있고 기록은 비어 있음)</li></ol>'+go('cur','교육과정 설정')+'</div>'
+    +'<li>「<b>배포용 파일 만들기</b>」로 받은 HTML을 담임께 나눠 드립니다. (교육과정·규칙만 있고 기록은 비어 있음)<br><small>학생 명단·기록까지 넣어 주려면 「학년 현황 → <b>반별 파일로 나누기</b>」.</small></li></ol>'+go('cur','교육과정 설정')+'</div>'
   +'<div class="qg-role"><div class="qg-h"><span class="qg-n">B</span>담임 선생님</div><ol>'
     +'<li>받은 HTML을 <b>내 폴더에 먼저 저장</b> (메신저 첨부를 바로 열지 않기)</li>'
     +'<li>크롬·엣지로 열고 오른쪽 위 빨간 점 「<b>파일에 저장 연결</b>」 → 방금 연 그 파일 선택(초록 점이 되면 자동 저장). 다음부터는 열 때마다 「다시 연결」 한 번.</li>'

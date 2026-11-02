@@ -18,7 +18,7 @@ def j(o):
     return json.dumps(o, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
 
 FILES = ['app1_core.js', 'app2_ui.js', 'app2c_kit.js', 'app2d_plus.js', 'app2b_views.js', 'app3_io.js',
-         'app3b_backup.js', 'app3c_neis.js', 'app3d_demo.js', 'app3e_pickup.js']
+         'app3b_backup.js', 'app3c_neis.js', 'app3d_demo.js', 'app3e_pickup.js', 'app3f_split.js']
 shell = (src / 'shell.html').read_text(encoding='utf-8')
 css = (src / 'app.css').read_text(encoding='utf-8')
 app = '\n'.join((src / f).read_text(encoding='utf-8') for f in FILES) + '\ninit();\n'

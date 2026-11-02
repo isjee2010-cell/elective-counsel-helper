@@ -72,6 +72,26 @@ let fail = 0; const ok = (c, m) => { console.log((c ? '✓ ' : '✗ ') + m); if 
     return n;
   });
   ok(xss === 0, '가져온 자료 속 HTML 조각이 화면에 끼어들지 않음');
+  // 6. 반별 파일 나누기: 각 파일에는 그 반 학생·기록만, 통신 차단 잠금 유지
+  const split = await p.evaluate(async () => {
+    window.__fs = {};
+    const dir = { name: 'out', async getFileHandle(n, o) { if (!(n in window.__fs) && !(o && o.create)) { const e = new Error('nf'); e.name = 'NotFoundError'; throw e; } return { name: n, async createWritable() { let buf = ''; return { async write(t) { buf += t; }, async close() { window.__fs[n] = buf; } }; } }; } };
+    window.showDirectoryPicker = async () => dir;
+    DB.students.forEach(s => { s.demo = false; }); DB.records.forEach(r => { r.demo = false; });
+    selfTpl = selfTpl || document.documentElement.outerHTML;
+    await splitRun(splitGroups());
+    const out = [];
+    for (const [n, t] of Object.entries(window.__fs)) {
+      const db = extractBlock(t, 'J-DB');
+      const bans = new Set(db.students.map(s => s.b));
+      const sids = new Set(db.students.map(s => s.id));
+      out.push({ n, oneBan: bans.size === 1, recsOk: db.records.every(r => sids.has(r.sid)), csp: /connect-src 'none'/.test(t), fid: db.fileId });
+    }
+    return { out, main: DB.fileId };
+  });
+  ok(split.out.length >= 2 && split.out.every(x => x.oneBan && x.recsOk), '반별 파일: 다른 반 학생·기록이 섞이지 않음');
+  ok(split.out.every(x => x.csp), '반별 파일: 통신 차단 잠금 유지');
+  ok(new Set(split.out.map(x => x.fid)).size === split.out.length && !split.out.some(x => x.fid === split.main), '반별 파일: 파일마다 고유 번호');
   ok(requests.length === 0, '외부 네트워크 요청 0건' + (requests.length ? ': ' + requests.slice(0, 3).join(', ') : ''));
 
   await b.close();
